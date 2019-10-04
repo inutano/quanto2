@@ -3,7 +3,7 @@ set -eu
 
 abspath(){
   p=${1}
-  cd $(dirname ${p} && pwd -P)
+  cd $(dirname ${p}) && pwd -P
 }
 
 BASE_DIR=$(abspath ${0})
