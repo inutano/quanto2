@@ -1,6 +1,6 @@
 #!/bin/sh
 #$ -S /bin/sh
-set -eu
+set -eux
 
 CONF_PATH=${1}
 CWL_DIR=${2}
