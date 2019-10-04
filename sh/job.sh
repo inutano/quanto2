@@ -23,5 +23,5 @@ cwltool \
   --tmp-outdir-prefix ${TMPDIR} \
   --outdir ${dest_path} \
   "${CWL_DIR}/fastqc_wf_fq.cwl" \
-  --nthreads 8 \
+  --nthreads 16 \
   --input_fastq ${fastq_path}
