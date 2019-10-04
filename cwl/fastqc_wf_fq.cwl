@@ -5,7 +5,7 @@ doc: "Run FastQC and summarize for Quanto database"
 
 inputs:
   nthreads: int
-  input_fastq: File
+  input_fastq: File[]
 
 outputs:
   fastqc_result:

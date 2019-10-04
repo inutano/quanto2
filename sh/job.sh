@@ -4,8 +4,7 @@ set -eu
 
 CONF_PATH=${1}
 CWL_DIR=${2}
-
-TMPDIR="/data1/inutano/quanto2"
+TMPDIR="/data1/inutano/work"
 mkdir -p ${TMPDIR}
 
 conf_line=$(awk -v id=${SGE_TASK_ID} 'NR == id' ${CONF_PATH})
@@ -22,4 +21,6 @@ cwltool \
   --timestamps \
   --tmp-outdir-prefix ${TMPDIR} \
   --outdir ${dest_path} \
-  "${CWL_DIR}/fastqc_wf_fq.cwl"
+  "${CWL_DIR}/fastqc_wf_fq.cwl" \
+  --nthreads 8 \
+  --input_fastq ${fastq_path}
