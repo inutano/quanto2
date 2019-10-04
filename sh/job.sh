@@ -9,7 +9,8 @@ TMPDIR="/data1/inutano/work/quanto2"
 mkdir -p ${TMPDIR}
 
 fastq_path=$(awk -v id=${SGE_TASK_ID} 'NR == id { print $0 }' ${CONF_PATH})
-dest_path=${DEST_DIR}/$(basename ${fastq_path} | sed -e 's:\..*$::g')
+id=$(basename ${fastq_path} | sed -e 's:\..*$::g')
+dest_path=${DEST_DIR}/result/$(echo ${id} | sed -e 's:...$::g')/${id}
 mkdir -p ${dest_path}
 
 # load docker and venv
