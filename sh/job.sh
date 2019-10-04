@@ -4,10 +4,10 @@ set -eux
 
 CONF_PATH=${1}
 CWL_DIR=${2}
-TMPDIR="/data1/inutano/work"
+TMPDIR="/data1/inutano/work/quanto2"
 mkdir -p ${TMPDIR}
 
-conf_line=$(awk -v id=${SGE_TASK_ID} 'NR == id' ${CONF_PATH})
+conf_line=$(awk -v id=${SGE_TASK_ID} 'NR == id { print $0 }' ${CONF_PATH})
 fastq_path=$(echo ${conf_line} | cut -f 1)
 dest_path=$(echo ${conf_line} | cut -f 2)
 

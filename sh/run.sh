@@ -18,5 +18,5 @@ fi
 
 # Execute array job
 source "/home/geadmin/UGED/uged/common/settings.sh"
-qsub -j y -o ${DEST_DIR} -t 1:$(wc -l ${JOB_CONF}) \
+qsub -j y -o ${DEST_DIR} -t 1-$(wc -l ${JOB_CONF}):1 \
   ${BASE_DIR}/job.sh ${JOB_CONF} ${CWL_DIR}
