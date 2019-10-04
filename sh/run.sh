@@ -12,9 +12,9 @@ CWL_DIR="${BASE_DIR}/../cwl"
 JOB_CONF="${DEST_DIR}/array.conf"
 
 # Create array job configuration
-find ${DATA_DIR} -name '*fastq*' > ${JOB_CONF}
+find ${DATA_DIR} -name '*.fastq.*' > ${JOB_CONF}
 
 # Execute array job
 source "/home/geadmin/UGED/uged/common/settings.sh"
-qsub -t 1:$(wc -l ${JOB_CONF}) -j y -o ${DEST_DIR} \
+qsub -j y -o ${DEST_DIR} -t 1:$(wc -l ${JOB_CONF}) \
   ${BASE_DIR}/job.sh ${JOB_CONF} ${CWL_DIR}
