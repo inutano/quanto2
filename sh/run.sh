@@ -6,8 +6,8 @@ abspath(){
 }
 
 BASE_DIR=$(abspath ${0})
-DATA_DIR=$(abspath ${1})
-DEST_DIR=$(abspath ${2})
+DATA_DIR=$(abspath ${1})/$(basename ${1})
+DEST_DIR=$(abspath ${2})/$(basename ${1})
 CWL_DIR="${BASE_DIR}/../cwl"
 JOB_CONF="${DEST_DIR}/array.conf"
 
