@@ -18,5 +18,5 @@ fi
 
 # Execute array job
 source "/home/geadmin/UGED/uged/common/settings.sh"
-qsub -j y -o ${DEST_DIR} -pe def_slot 16 -l s_vmem=64G -l mem_req=64G　-t 1-$(wc -l ${JOB_CONF} | awk '$0=$1'):1 \
+qsub -j y -o ${DEST_DIR} -pe def_slot 16 -l s_vmem=64G -l mem_req=64G -t 1-$(wc -l ${JOB_CONF} | awk '$0=$1'):1 \
   ${BASE_DIR}/job.sh ${JOB_CONF} ${CWL_DIR} ${DEST_DIR}
