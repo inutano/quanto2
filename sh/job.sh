@@ -4,12 +4,13 @@ set -eux
 
 CONF_PATH=${1}
 CWL_DIR=${2}
+DEST_DIR=${3}
 TMPDIR="/data1/inutano/work/quanto2"
 mkdir -p ${TMPDIR}
 
-conf_line=$(awk -v id=${SGE_TASK_ID} 'NR == id { print $0 }' ${CONF_PATH})
-fastq_path=$(echo ${conf_line} | cut -f 1)
-dest_path=$(echo ${conf_line} | cut -f 2)
+fastq_path=$(awk -v id=${SGE_TASK_ID} 'NR == id { print $0 }' ${CONF_PATH})
+dest_path=${DEST_DIR}/$(basename ${fastq_path} | sed -e 's:\..*$::g')
+mkdir -p ${dest_path}
 
 # load docker and venv
 module load docker
