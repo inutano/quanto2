@@ -5,18 +5,33 @@ abspath(){
   cd $(dirname ${1}) && pwd -P
 }
 
+# The path to the directory to where the DRA storage attached
+FASTQ_DIR="/usr/local/resources/dra/fastq"
+
+# The path to the directory where this script exists
 BASE_DIR=$(abspath ${0})
-DATA_DIR=$(abspath ${1})/$(basename ${1})
-DEST_DIR=$(abspath ${2})/$(basename ${2})
 CWL_DIR="${BASE_DIR}/../cwl"
-JOB_CONF="${DEST_DIR}/array.conf"
+
+# The path to the directory where the result data are stored
+RESULT_DIR="${BASE_DIR}/../data"
+mkdir -p "${RESULT_DIR}"
+
+# Create working directory
+WORK_DIR="${RESULT_DIR}/$(date "+%Y%m%d")"
+mkdir -p "${WORK_DIR}"
+
+# Create a list of sequence data file name already calculated
+LIST_QC_DONE="${WORK_DIR}/quanto.done.list"
+find "${RESULT_DIR}" -name '*ttl' -type 'f' | xargs -I{} basename {} ".ttl" | sort -u > ${LIST_QC_DONE}
 
 # Create array job configuration
-if [[ ! -e ${JOB_CONF} ]]; then
-  find ${DATA_DIR} -name '*.fastq.*' > ${JOB_CONF}
-fi
+cd ${WORK_DIR} && find ${FASTQ_DIR} -name '*.fastq.*' -printf "%T@ %p\n" | sort -nr | awk '{ print $NF }' | split -l 5000 -d - "array."
+
+# Load UGE settings
+source "/home/geadmin/UGED/uged/common/settings.sh"
 
 # Execute array job
-source "/home/geadmin/UGED/uged/common/settings.sh"
-qsub -j y -o ${DEST_DIR} -pe def_slot 16 -l s_vmem=32G -l mem_req=32G -t 1-$(wc -l ${JOB_CONF} | awk '$0=$1'):1 \
-  ${BASE_DIR}/job.sh ${JOB_CONF} ${CWL_DIR} ${DEST_DIR}
+cd ${WORK_DIR} && ls "array.*" | sort | while read jobconf; do
+  qsub -j y -N "${jobconf}" -o ${WORK_DIR} -pe def_slot 16 -l s_vmem=32G -l mem_req=32G -t 1-5000:1 \
+    ${BASE_DIR}/job.sh ${jobconf} ${CWL_DIR} ${WORK_DIR} ${LIST_QC_DONE}
+done
