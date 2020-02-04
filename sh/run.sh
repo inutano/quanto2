@@ -43,6 +43,6 @@ fi
 # Execute array job
 find ${WORK_DIR} -name "array.*" | sort | while read jobconf; do
   jobname=$(basename ${jobconf})
-  qsub -j y -N "${jobname}" -o ${WORK_DIR} -pe def_slot 16 -l s_vmem=32G -l mem_req=32G -t 1-5000:1 \
+  qsub -j y -N "${jobname}" -o /dev/null -pe def_slot 16 -l s_vmem=32G -l mem_req=32G -t 1-5000:1 \
     ${JOB_SH} ${jobconf} ${CWL_DIR} ${WORK_DIR} ${LIST_QC_DONE}
 done
