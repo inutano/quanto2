@@ -1,4 +1,8 @@
 #!/bin/sh
+#
+# usage:
+#   ./run.sh [|singularity]
+#
 set -eux
 
 abspath(){
@@ -27,12 +31,18 @@ find "${RESULT_DIR}" -name '*ttl' -type 'f' | xargs -I{} basename {} ".ttl" | so
 # Create array job configuration
 cd ${WORK_DIR} && find ${FASTQ_DIR} -name '*.fastq.*' -printf "%T@ %p\n" | sort -nr | awk '{ print $NF }' | split -l 5000 -d - "array."
 
-# Load UGE settings
-source "/home/geadmin/UGED/uged/common/settings.sh"
+# If any argument is given, singularity mode is on
+if [[ $# -eq 0 ]]; then
+  # Load UGE settings for DBCLS node
+  source "/home/geadmin/UGED/uged/common/settings.sh"
+  JOB_SH="${BASE_DIR}/job.sh"
+else
+  JOB_SH="${BASE_DIR}/job.singularity.sh"
+fi
 
 # Execute array job
 find ${WORK_DIR} -name "array.*" | sort | while read jobconf; do
   jobname=$(basename ${jobconf})
   qsub -j y -N "${jobname}" -o ${WORK_DIR} -pe def_slot 16 -l s_vmem=32G -l mem_req=32G -t 1-5000:1 \
-    ${BASE_DIR}/job.sh ${jobconf} ${CWL_DIR} ${WORK_DIR} ${LIST_QC_DONE}
+    ${JOB_SH} ${jobconf} ${CWL_DIR} ${WORK_DIR} ${LIST_QC_DONE}
 done
