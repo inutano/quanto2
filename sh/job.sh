@@ -25,8 +25,6 @@ if [[ -z "${is_done}" ]]; then
 
   # run cwltool
   cwltool \
-    --debug \
-    --timestamps \
     --tmp-outdir-prefix ${TMPDIR} \
     --outdir ${dest_path} \
     "${CWL_DIR}/fastqc_wf_fq.cwl" \
