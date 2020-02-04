@@ -21,7 +21,7 @@ if [[ -z "${is_done}" ]]; then
 
   # load docker and venv
   module load docker
-  source "/home/inutano/env/bin/activate"
+  source "/home/inutano/env3/bin/activate"
 
   # run cwltool
   cwltool \
