@@ -24,6 +24,7 @@ if [[ -z "${is_done}" ]]; then
   source "/home/inutano/env3/bin/activate"
 
   # run cwltool
+  cd "/home/inutano/repos/quanto2/singularity"
   cwltool \
     --singularity \
     --tmp-outdir-prefix ${TMPDIR} \
