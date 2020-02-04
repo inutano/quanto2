@@ -31,7 +31,8 @@ cd ${WORK_DIR} && find ${FASTQ_DIR} -name '*.fastq.*' -printf "%T@ %p\n" | sort 
 source "/home/geadmin/UGED/uged/common/settings.sh"
 
 # Execute array job
-cd ${WORK_DIR} && ls "array.*" | sort | while read jobconf; do
-  qsub -j y -N "${jobconf}" -o ${WORK_DIR} -pe def_slot 16 -l s_vmem=32G -l mem_req=32G -t 1-5000:1 \
+find ${WORK_DIR} -name "array.*" | sort | while read jobconf; do
+  jobname=$(basename ${jobconf})
+  qsub -j y -N "${jobname}" -o ${WORK_DIR} -pe def_slot 16 -l s_vmem=32G -l mem_req=32G -t 1-5000:1 \
     ${BASE_DIR}/job.sh ${jobconf} ${CWL_DIR} ${WORK_DIR} ${LIST_QC_DONE}
 done
